@@ -11,6 +11,7 @@ class Sqlite3Database(CommonDatabase):
         CREATE TABLE IF NOT EXISTS songs (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             name TEXT NOT NULL,
+            file_path TEXT,
             fingerprinted INTEGER DEFAULT 0
         );
     """
@@ -27,6 +28,10 @@ class Sqlite3Database(CommonDatabase):
 
     CREATE_UNIQUE_CONSTRAINT = """
         CREATE UNIQUE INDEX IF NOT EXISTS idx_hash_offset ON fingerprints (hash, song_id, offset);
+    """
+
+    CREATE_PATH_INDEX = """
+        CREATE INDEX IF NOT EXISTS idx_file_path ON songs (file_path);
     """
 
     def __init__(self, db=None, **kwargs):
@@ -52,3 +57,4 @@ class Sqlite3Database(CommonDatabase):
             cur.execute(self.CREATE_SONGS_TABLE)
             cur.execute(self.CREATE_FINGERPRINTS_TABLE)
             cur.execute(self.CREATE_UNIQUE_CONSTRAINT)
+            cur.execute(self.CREATE_PATH_INDEX)
