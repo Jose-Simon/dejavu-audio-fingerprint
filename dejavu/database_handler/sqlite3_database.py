@@ -58,3 +58,19 @@ class Sqlite3Database(CommonDatabase):
             cur.execute(self.CREATE_FINGERPRINTS_TABLE)
             cur.execute(self.CREATE_UNIQUE_CONSTRAINT)
             cur.execute(self.CREATE_PATH_INDEX)
+
+    def insert_song(self, song_name: str, file_hash: str, total_hashes: int) -> int:
+        """
+        Inserts a new song entry with name and file path (if available) into the database.
+    
+        :param song_name: Name of the song.
+        :param file_hash: Currently unused for SQLite but passed for compatibility.
+        :param total_hashes: Currently unused for SQLite but passed for compatibility.
+        :return: The inserted row ID.
+        """
+        with self.cursor() as cur:
+            cur.execute(
+                "INSERT INTO songs (name, file_path, fingerprinted) VALUES (?, ?, 0)",
+                (song_name, song_name)  # using song_name as a proxy for full path
+            )
+            return cur.lastrowid
