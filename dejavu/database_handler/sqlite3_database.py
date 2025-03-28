@@ -59,7 +59,7 @@ class Sqlite3Database(CommonDatabase):
             cur.execute(self.CREATE_UNIQUE_CONSTRAINT)
             cur.execute(self.CREATE_PATH_INDEX)
 
-    def insert_song(self, song_name: str, file_hash: str, total_hashes: int) -> int:
+    def insert_song(self, song_name: str, file_hash: str, total_hashes: int, file_path: str = None) -> int:
         """
         Inserts a new song entry with name and file path (if available) into the database.
     
@@ -74,3 +74,5 @@ class Sqlite3Database(CommonDatabase):
                 (song_name, song_name)  # using song_name as a proxy for full path
             )
             return cur.lastrowid
+
+    def insert_song(self, song_name: str, file_hash: str, total_hashes: int, file_path: str = None) -> int:
