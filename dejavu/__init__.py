@@ -214,7 +214,8 @@ class Dejavu:
                 FINGERPRINTED_CONFIDENCE: round(hashes_matched / song_hashes, 2),
                 OFFSET: offset,
                 OFFSET_SECS: nseconds,
-                FIELD_FILE_SHA1: song.get(FIELD_FILE_SHA1, None).encode("utf8")
+                FIELD_FILE_SHA1: song.get(FIELD_FILE_SHA1, None).encode("utf8"),
+                FILE_PATH: song.get(FILE_PATH, None)
             }
 
             songs_result.append(song)
