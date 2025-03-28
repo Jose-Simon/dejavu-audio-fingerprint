@@ -75,4 +75,8 @@ class Sqlite3Database(CommonDatabase):
             )
             return cur.lastrowid
 
-    def insert_song(self, song_name: str, file_hash: str, total_hashes: int, file_path: str = None) -> int:
+    def get_song_by_id(self, song_id: int) -> Dict[str, str]:
+        with self.cursor() as cur:
+            cur.execute("SELECT id, name, file_path FROM songs WHERE id = ?", (song_id,))
+            row = cur.fetchone()
+            return dict(row) if row else None
