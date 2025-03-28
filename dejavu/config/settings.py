@@ -4,6 +4,7 @@
 SONG_ID = "song_id"
 SONG_NAME = 'song_name'
 RESULTS = 'results'
+FILE_PATH = "file_path"
 
 HASHES_MATCHED = 'hashes_matched_in_input'
 
