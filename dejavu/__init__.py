@@ -109,7 +109,7 @@ class Dejavu:
                 # Print traceback because we can't reraise it here
                 traceback.print_exc(file=sys.stdout)
             else:
-                sid = self.db.insert_song(song_name, file_hash, len(hashes))
+                sid = self.db.insert_song(song_name, file_hash, len(hashes), filename)
 
                 self.db.insert_hashes(sid, hashes)
                 self.db.set_song_fingerprinted(sid)
@@ -138,7 +138,7 @@ class Dejavu:
                 self.limit,
                 song_name=song_name
             )
-            sid = self.db.insert_song(song_name, file_hash)
+            sid = self.db.insert_song(song_name, file_hash, len(hashes), filename)
 
             self.db.insert_hashes(sid, hashes)
             self.db.set_song_fingerprinted(sid)
