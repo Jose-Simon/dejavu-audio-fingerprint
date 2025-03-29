@@ -14,7 +14,7 @@ from dejavu.config.settings import (DEFAULT_FS, DEFAULT_OVERLAP_RATIO,
                                     FINGERPRINTED_CONFIDENCE,
                                     FINGERPRINTED_HASHES, HASHES_MATCHED,
                                     INPUT_CONFIDENCE, INPUT_HASHES, OFFSET,
-                                    OFFSET_SECS, SONG_ID, SONG_NAME, TOPN)
+                                    OFFSET_SECS, SONG_ID, SONG_NAME, TOPN, FILE_PATH)
 from dejavu.logic.fingerprint import fingerprint
 
 
@@ -198,6 +198,8 @@ class Dejavu:
             song = self.db.get_song_by_id(song_id)
 
             song_name = song.get(SONG_NAME, None)
+            if isinstance(song_name, bytes):
+                song_name = song_name.decode("utf8")
             song_hashes = song.get(FIELD_TOTAL_HASHES, None)
             nseconds = round(float(offset) / DEFAULT_FS * DEFAULT_WINDOW_SIZE * DEFAULT_OVERLAP_RATIO, 5)
             hashes_matched = dedup_hashes[song_id]
@@ -209,12 +211,12 @@ class Dejavu:
                 FINGERPRINTED_HASHES: song_hashes,
                 HASHES_MATCHED: hashes_matched,
                 # Percentage regarding hashes matched vs hashes from the input.
-                INPUT_CONFIDENCE: round(hashes_matched / queried_hashes, 2),
+                INPUT_CONFIDENCE: round(hashes_matched / queried_hashes, 5) if queried_hashes else 0.0,
                 # Percentage regarding hashes matched vs hashes fingerprinted in the db.
-                FINGERPRINTED_CONFIDENCE: round(hashes_matched / song_hashes, 2),
+                FINGERPRINTED_CONFIDENCE: round(hashes_matched / song_hashes, 5) if song_hashes else 0.0,
                 OFFSET: offset,
                 OFFSET_SECS: nseconds,
-                FIELD_FILE_SHA1: song.get(FIELD_FILE_SHA1, None).encode("utf8"),
+                FIELD_FILE_SHA1: song.get(FIELD_FILE_SHA1, b"").decode("utf8") if isinstance(song.get(FIELD_FILE_SHA1, None), bytes) else song.get(FIELD_FILE_SHA1, None),
                 FILE_PATH: song.get(FILE_PATH, None)
             }
 
