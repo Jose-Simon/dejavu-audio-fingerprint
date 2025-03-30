@@ -68,6 +68,11 @@ class Sqlite3Database(CommonDatabase):
 
     @contextmanager
     def cursor(self, dictionary=False):
+        if dictionary:
+            self.conn.row_factory = sqlite3.Row
+        else:
+            self.conn.row_factory = None
+    
         cur = self.conn.cursor()
         try:
             yield cur
