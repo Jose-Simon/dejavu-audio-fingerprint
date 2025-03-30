@@ -39,7 +39,7 @@ SONGS_TABLENAME = "songs"
 FIELD_SONG_ID = 'song_id'
 FIELD_SONGNAME = 'song_name'
 FIELD_FINGERPRINTED = "fingerprinted"
-FIELD_FILE_SHA1 = 'file_sha1'
+FIELD_FILE_SHA1 = 'file_hash'
 FIELD_TOTAL_HASHES = 'total_hashes'
 
 # TABLE FINGERPRINTS
