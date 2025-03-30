@@ -27,13 +27,37 @@ class Sqlite3Database(CommonDatabase):
         );
     """
 
-    CREATE_UNIQUE_CONSTRAINT = """
-        CREATE UNIQUE INDEX IF NOT EXISTS idx_hash_offset ON fingerprints (hash, song_id, offset);
-    """
+    CREATE_UNIQUE_CONSTRAINT = "CREATE UNIQUE INDEX IF NOT EXISTS idx_hash_offset ON fingerprints (hash, song_id, offset);"
 
-    CREATE_PATH_INDEX = """
-        CREATE INDEX IF NOT EXISTS idx_file_path ON songs (file_path);
-    """
+    CREATE_PATH_INDEX = "CREATE INDEX IF NOT EXISTS idx_file_path ON songs (file_path);"
+
+    SELECT = "SELECT hash, song_id, offset FROM fingerprints WHERE hash = ?"
+    
+    SELECT_ALL = "SELECT hash, song_id, offset FROM fingerprints"
+
+    SELECT_MULTIPLE = "SELECT hash, song_id, offset FROM fingerprints WHERE hash IN (%s)"
+    
+    SELECT_SONG = "SELECT id, name, file_path FROM songs WHERE id = ?"
+    
+    SELECT_SONGS = "SELECT id, name, file_path, fingerprinted FROM songs WHERE fingerprinted = 1"
+    
+    SELECT_NUM_FINGERPRINTS = "SELECT COUNT(*) as n FROM fingerprints"
+
+    SELECT_UNIQUE_SONG_IDS = "SELECT COUNT(DISTINCT song_id) as n FROM songs"
+
+    INSERT_FINGERPRINT = "INSERT OR IGNORE INTO fingerprints (song_id, hash, offset) VALUES (?, ?, ?)"
+
+    UPDATE_SONG_FINGERPRINTED = "UPDATE songs SET fingerprinted = 1 WHERE id = ?"
+
+    DELETE_UNFINGERPRINTED = "DELETE FROM songs WHERE fingerprinted = 0"
+
+    DROP_FINGERPRINTS = "DROP TABLE IF EXISTS fingerprints"
+    
+    DROP_SONGS = "DROP TABLE IF EXISTS songs"
+
+    DELETE_SONGS = "DELETE FROM songs WHERE id IN (%s)"
+
+    IN_MATCH = "?"  # SQLite uses `?` for parameter placeholders, not %s
 
     def __init__(self, db=None, **kwargs):
         self.db_path = db or "dejavu.db"
