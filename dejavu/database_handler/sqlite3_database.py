@@ -42,7 +42,7 @@ class Sqlite3Database(CommonDatabase):
         self.setup()
 
     @contextmanager
-    def cursor(self):
+    def cursor(self, dictionary=False):
         cur = self.conn.cursor()
         try:
             yield cur
