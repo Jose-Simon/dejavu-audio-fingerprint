@@ -38,7 +38,7 @@ class Sqlite3Database(CommonDatabase):
 
     SELECT_MULTIPLE = "SELECT hash, song_id, offset FROM fingerprints WHERE hash IN (%s)"
     
-    SELECT_SONG = "SELECT id, name, file_path FROM songs WHERE id = ?"
+    SELECT_SONG = "SELECT id, name, file_path, file_hash FROM songs WHERE id = ?"
     
     SELECT_SONGS = "SELECT id, name, file_path, file_hash, fingerprinted FROM songs WHERE fingerprinted = 1"
     
