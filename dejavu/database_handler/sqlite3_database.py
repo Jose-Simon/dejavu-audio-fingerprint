@@ -13,6 +13,7 @@ class Sqlite3Database(CommonDatabase):
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             name TEXT NOT NULL,
             file_path TEXT,
+            file_hash TEXT,
             fingerprinted INTEGER DEFAULT 0
         );
     """
@@ -39,7 +40,7 @@ class Sqlite3Database(CommonDatabase):
     
     SELECT_SONG = "SELECT id, name, file_path FROM songs WHERE id = ?"
     
-    SELECT_SONGS = "SELECT id, name, file_path, fingerprinted FROM songs WHERE fingerprinted = 1"
+    SELECT_SONGS = "SELECT id, name, file_path, file_hash, fingerprinted FROM songs WHERE fingerprinted = 1"
     
     SELECT_NUM_FINGERPRINTS = "SELECT COUNT(*) as n FROM fingerprints"
 
