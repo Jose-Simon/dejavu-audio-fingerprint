@@ -103,6 +103,6 @@ class Sqlite3Database(CommonDatabase):
 
     def get_song_by_id(self, song_id: int) -> Dict[str, str]:
         with self.cursor() as cur:
-            cur.execute("SELECT id, name, file_path FROM songs WHERE id = ?", (song_id,))
+            cur.execute("SELECT id, name, file_path, file_hash FROM songs WHERE id = ?", (song_id,))
             row = cur.fetchone()
             return dict(row) if row else None
