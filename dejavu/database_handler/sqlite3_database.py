@@ -3,6 +3,7 @@ import os
 from contextlib import contextmanager
 
 from dejavu.base_classes.common_database import CommonDatabase
+from typing import Dict, List, Tuple
 
 class Sqlite3Database(CommonDatabase):
     type = "sqlite3"
