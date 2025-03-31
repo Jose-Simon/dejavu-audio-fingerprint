@@ -14,6 +14,7 @@ class Sqlite3Database(CommonDatabase):
             name TEXT NOT NULL,
             file_path TEXT,
             file_hash TEXT,
+            total_hashes INTEGER DEFAULT 0,
             fingerprinted INTEGER DEFAULT 0
         );
     """
@@ -102,7 +103,7 @@ class Sqlite3Database(CommonDatabase):
         with self.cursor() as cur:
             cur.execute(
                 "INSERT INTO songs (name, file_path, file_hash, total_hashes, fingerprinted) VALUES (?, ?, ?, 0)",
-                (song_name, file_path or song_name, file_hash)  # using song_name as a proxy for full path
+                (song_name, file_path or song_name, file_hash, total_hashes)  # using song_name as a proxy for full path
             )
             return cur.lastrowid
 
