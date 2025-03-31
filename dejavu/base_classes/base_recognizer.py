@@ -20,6 +20,7 @@ class BaseRecognizer(object, metaclass=abc.ABCMeta):
             fingerprint_times.append(fingerprint_time)
             hashes |= set(fingerprints)
 
+        print(f"[DEBUG] Interlude hashes generated: {len(hashes)}") # DEBUG for hash count
         matches, dedup_hashes, query_time = self.dejavu.find_matches(hashes)
 
         t = time()
