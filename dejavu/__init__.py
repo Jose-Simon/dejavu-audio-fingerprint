@@ -192,15 +192,21 @@ class Dejavu:
         songs_result = []
         for song_id, offset, _ in songs_matches[0:topn]:  # consider topn elements in the result
             song = self.db.get_song_by_id(song_id)
+            if not isinstance(song, dict):
+                print(f"[WARN] Unexpected song type: {type(song)} for song_id={song_id}")
+                continue
 
-            song_name = song.get(SONG_NAME, None)
+            song_name = song.get(SONG_NAME) or song.get("name")
             if isinstance(song_name, bytes):
-                song_name = song_name.decode("utf8")
+                song_name = song_name.decode("utf-8")
+            elif song_name is None:
+                song_name = f"[unknown-{song_id}]"
+
             song_hashes = song.get(FIELD_TOTAL_HASHES, None)
             nseconds = round(float(offset) / DEFAULT_FS * DEFAULT_WINDOW_SIZE * DEFAULT_OVERLAP_RATIO, 5)
             hashes_matched = dedup_hashes[song_id]
 
-            song = {
+            song_result = {
                 SONG_ID: song_id,
                 SONG_NAME: song_name.encode("utf8"),
                 INPUT_HASHES: queried_hashes,
@@ -212,11 +218,11 @@ class Dejavu:
                 FINGERPRINTED_CONFIDENCE: round(hashes_matched / song_hashes, 5) if song_hashes else 0.0,
                 OFFSET: offset,
                 OFFSET_SECS: nseconds,
-                FIELD_FILE_SHA1: song.get(FIELD_FILE_SHA1, b"").decode("utf8") if isinstance(song.get(FIELD_FILE_SHA1, None), bytes) else song.get(FIELD_FILE_SHA1, None),
-                FILE_PATH: song.get(FILE_PATH, None)
+                FIELD_FILE_SHA1: song.get(FIELD_FILE_SHA1, ""),
+                FILE_PATH: song.get(FILE_PATH, "Unknown")
             }
 
-            songs_result.append(song)
+            songs_result.append(song_result)
 
         return songs_result
 
