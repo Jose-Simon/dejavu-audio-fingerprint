@@ -192,13 +192,13 @@ class Dejavu:
         songs_result = []
         for song_id, offset, _ in songs_matches[0:topn]:  # consider topn elements in the result
             song = self.db.get_song_by_id(song_id)
-            print(f"Processing song_id {song_id}: {song}")  # DEBUG: Inspect `song` data
+            # print(f"Processing song_id {song_id}: {song}")  # DEBUG: Inspect `song` data
             if not isinstance(song, dict):
                 print(f"[WARN] Unexpected song type: {type(song)} for song_id={song_id}")
                 continue
 
             song_name = song.get(SONG_NAME) or song.get("name")
-            print(f"Processing song_name: {song_name}")  # DEBUG: Inspect `song_name` data
+            # print(f"Processing song_name: {song_name}")  # DEBUG: Inspect `song_name` data
             if isinstance(song_name, bytes):
                 song_name = song_name.decode("utf-8")
             elif song_name is None:
