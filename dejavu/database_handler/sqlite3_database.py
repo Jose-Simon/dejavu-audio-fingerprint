@@ -119,15 +119,15 @@ class Sqlite3Database(CommonDatabase):
             return None
 
     def get_songs(self) -> List[Dict[str, str]]:
-    with self.cursor() as cur:
-        cur.execute(self.SELECT_SONGS)
-        rows = cur.fetchall()
-        results = []
-        for row in rows:
-            try:
-                results.append(dict(row.items()))
-            except AttributeError:
-                # Fallback if row is a plain tuple
-                col_names = [desc[0] for desc in cur.description]
-                results.append(dict(zip(col_names, row)))
-        return results
+        with self.cursor() as cur:
+            cur.execute(self.SELECT_SONGS)
+            rows = cur.fetchall()
+            results = []
+            for row in rows:
+                try:
+                    results.append(dict(row.items()))
+                except AttributeError:
+                    # Fallback if row is a plain tuple
+                    col_names = [desc[0] for desc in cur.description]
+                    results.append(dict(zip(col_names, row)))
+            return results
