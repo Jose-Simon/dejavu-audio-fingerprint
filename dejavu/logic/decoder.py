@@ -67,7 +67,7 @@ def read(file_name: str, limit: int = None) -> Tuple[List[List[int]], int, str]:
     """
     # pydub does not support 24-bit wav files, use wavio when this occurs
     try:
-        audiofile = AudioSegment.from_file(file_name)
+        audiofile = AudioSegment.from_file(file_name).set_frame_rate(22050).set_channels(1)
 
         if limit:
             audiofile = audiofile[:limit * 1000]
