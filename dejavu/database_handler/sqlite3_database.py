@@ -108,7 +108,7 @@ class Sqlite3Database(CommonDatabase):
             return cur.lastrowid
 
     def get_song_by_id(self, song_id: int) -> Dict[str, str]:
-        with self.cursor() as cur:
+        with self.cursor(dictionary=True) as cur:
             cur.execute("SELECT id, name, file_path, file_hash, total_hashes FROM songs WHERE id = ?", (song_id,))
             row = cur.fetchone()
             if row:
