@@ -224,7 +224,8 @@ class Dejavu:
                 FILE_PATH: song.get(FILE_PATH, "Unknown")
             }
 
-            print(f"[DEBUG] Matched {hashes_matched} / {song_hashes} → confidence = {round(hashes_matched / song_hashes, 5)}") # DEBUG to print FINGERPRINTED_CONFIDENCE
+            print(f"[DEBUG] Matched {hashes_matched} / Song hashes {song_hashes} → confidence = {round(hashes_matched / song_hashes, 5)}") # DEBUG to print FINGERPRINTED_CONFIDENCE
+            print(f"[DEBUG] Matched {hashes_matched} / Interlude hashes {queried_hashes} → confidence = {round(hashes_matched / queried_hashes, 5)}") # DEBUG to print INPUT_CONFIDENCE
             songs_result.append(song_result)
 
         return songs_result
