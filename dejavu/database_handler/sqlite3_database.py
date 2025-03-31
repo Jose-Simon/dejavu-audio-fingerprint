@@ -110,4 +110,9 @@ class Sqlite3Database(CommonDatabase):
         with self.cursor() as cur:
             cur.execute("SELECT id, name, file_path, file_hash FROM songs WHERE id = ?", (song_id,))
             row = cur.fetchone()
-            return dict(row) if row else None
+            return dict(row.items()) if row else None
+
+    def get_songs(self) -> List[Dict[str, str]]:
+        with self.cursor() as cur:
+            cur.execute(self.SELECT_SONGS)
+            return [dict(row.items()) for row in cur.fetchall()]
