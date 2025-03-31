@@ -110,9 +110,24 @@ class Sqlite3Database(CommonDatabase):
         with self.cursor() as cur:
             cur.execute("SELECT id, name, file_path, file_hash FROM songs WHERE id = ?", (song_id,))
             row = cur.fetchone()
-            return dict(row.items()) if row else None
+            if row:
+                try:
+                    return dict(row.items())
+                except AttributeError:
+                    col_names = [desc[0] for desc in cur.description]
+                    return dict(zip(col_names, row))
+            return None
 
     def get_songs(self) -> List[Dict[str, str]]:
-        with self.cursor() as cur:
-            cur.execute(self.SELECT_SONGS)
-            return [dict(row.items()) for row in cur.fetchall()]
+    with self.cursor() as cur:
+        cur.execute(self.SELECT_SONGS)
+        rows = cur.fetchall()
+        results = []
+        for row in rows:
+            try:
+                results.append(dict(row.items()))
+            except AttributeError:
+                # Fallback if row is a plain tuple
+                col_names = [desc[0] for desc in cur.description]
+                results.append(dict(zip(col_names, row)))
+        return results
