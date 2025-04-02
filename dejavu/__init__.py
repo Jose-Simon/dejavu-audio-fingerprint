@@ -165,6 +165,8 @@ class Dejavu:
         t = time()
         matches, dedup_hashes = self.db.return_matches(hashes)
         query_time = time() - t
+        print(f"[DEBUG] DB returned {len(matches)} matches from {len(hashes)} input hashes") # DEBUG
+        print(f"[DEBUG] Matched song hash counts: {dedup_hashes}") # DEBUG
 
         return matches, dedup_hashes, query_time
 
