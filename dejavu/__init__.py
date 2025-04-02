@@ -165,8 +165,8 @@ class Dejavu:
         t = time()
         matches, dedup_hashes = self.db.return_matches(hashes)
         query_time = time() - t
-        print(f"[DEBUG] DB returned {len(matches)} matches from {len(hashes)} input hashes") # DEBUG
-        print(f"[DEBUG] Matched song hash counts: {dedup_hashes}") # DEBUG
+        # print(f"[DEBUG] DB returned {len(matches)} matches from {len(hashes)} input hashes") # DEBUG
+        # print(f"[DEBUG] Matched song hash counts: {dedup_hashes}") # DEBUG
 
         return matches, dedup_hashes, query_time
 
@@ -226,8 +226,8 @@ class Dejavu:
                 FILE_PATH: song.get(FILE_PATH, "Unknown")
             }
 
-            print(f"[DEBUG] Matched {hashes_matched} / Song hashes {song_hashes} → confidence = {round(hashes_matched / song_hashes, 5)}") # DEBUG to print FINGERPRINTED_CONFIDENCE
-            print(f"[DEBUG] Matched {hashes_matched} / Interlude hashes {queried_hashes} → confidence = {round(hashes_matched / queried_hashes, 5)}") # DEBUG to print INPUT_CONFIDENCE
+            # print(f"[DEBUG] Matched {hashes_matched} / Song hashes {song_hashes} → confidence = {round(hashes_matched / song_hashes, 5)}") # DEBUG to print FINGERPRINTED_CONFIDENCE
+            # print(f"[DEBUG] Matched {hashes_matched} / Interlude hashes {queried_hashes} → confidence = {round(hashes_matched / queried_hashes, 5)}") # DEBUG to print INPUT_CONFIDENCE
             songs_result.append(song_result)
 
         return songs_result
