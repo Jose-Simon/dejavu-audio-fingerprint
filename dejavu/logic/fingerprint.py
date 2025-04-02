@@ -4,6 +4,7 @@ from typing import List, Tuple
 
 import matplotlib.mlab as mlab
 import matplotlib.pyplot as plt
+import librosa
 import numpy as np
 from scipy.ndimage.filters import maximum_filter
 from scipy.ndimage.morphology import (binary_erosion,
@@ -17,8 +18,7 @@ from dejavu.config.settings import (CONNECTIVITY_MASK, DEFAULT_AMP_MIN,
                                     MIN_HASH_TIME_DELTA,
                                     PEAK_NEIGHBORHOOD_SIZE, PEAK_SORT)
 
-
-def fingerprint(channel_samples: List[int],
+def fingerprint_old(channel_samples: List[int],
                 Fs: int = DEFAULT_FS,
                 wsize: int = DEFAULT_WINDOW_SIZE,
                 wratio: float = DEFAULT_OVERLAP_RATIO,
@@ -51,6 +51,31 @@ def fingerprint(channel_samples: List[int],
     # return hashes
     return generate_hashes(local_maxima, fan_value=fan_value)
 
+def fingerprint(channel_samples: List[int],
+                Fs: int = DEFAULT_FS,
+                wsize: int = DEFAULT_WINDOW_SIZE,
+                wratio: float = DEFAULT_OVERLAP_RATIO,
+                fan_value: int = DEFAULT_FAN_VALUE,
+                amp_min: int = DEFAULT_AMP_MIN) -> List[Tuple[str, int]]:
+    """
+    Generate fingerprints from audio using librosa STFT.
+    """
+
+    # Convert to float32 if needed
+    if channel_samples.dtype != np.float32:
+        channel_samples = channel_samples.astype(np.float32)
+
+    # Calculate hop_length based on overlap ratio
+    hop_length = int(wsize * (1 - wratio))
+
+    # Compute STFT → magnitude → dB
+    S = librosa.stft(channel_samples, n_fft=wsize, hop_length=hop_length, window="hann")
+    S_db = librosa.amplitude_to_db(np.abs(S), ref=np.max)
+
+    # S_db shape: [frequency_bins x time_bins]
+    local_maxima = get_2D_peaks(S_db, plot=False, amp_min=amp_min)
+
+    return generate_hashes(local_maxima, fan_value=fan_value)
 
 def get_2D_peaks(arr2D: np.array, plot: bool = False, amp_min: int = DEFAULT_AMP_MIN)\
         -> List[Tuple[List[int], List[int]]]:
