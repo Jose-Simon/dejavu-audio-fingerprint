@@ -72,14 +72,16 @@ def read(file_name: str, limit: int = None) -> Tuple[List[List[int]], int, str]:
         if limit:
             audiofile = audiofile[:limit * 1000]
 
-        data = np.fromstring(audiofile.raw_data, np.int16)
+        data = np.frombuffer(audiofile.raw_data, np.int16)
 
-        channels = []
-        for chn in range(audiofile.channels):
-            channels.append(data[chn::audiofile.channels])
+        channels = [data]
+        # for chn in range(audiofile.channels):
+        #    channels.append(data[chn::audiofile.channels])
 
-        audiofile.frame_rate
-    except audioop.error:
+    except audioop.error as e:
+        print(f"[ERROR] Skipping '{file_name}' due to audio processing error: {e}")
+        return [], 0, unique_hash(file_name)
+        continue
         _, _, audiofile = wavio.readwav(file_name)
 
         if limit:
