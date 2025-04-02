@@ -81,7 +81,7 @@ def read(file_name: str, limit: int = None) -> Tuple[List[List[int]], int, str]:
     except audioop.error as e:
         print(f"[ERROR] Skipping '{file_name}' due to audio processing error: {e}")
         return [], 0, unique_hash(file_name)
-        continue
+        
         _, _, audiofile = wavio.readwav(file_name)
 
         if limit:
