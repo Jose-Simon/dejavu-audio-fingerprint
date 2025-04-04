@@ -178,4 +178,5 @@ def generate_hashes(peaks: List[Tuple[int, int]], fan_value: int = DEFAULT_FAN_V
 
                     hashes.append((h.hexdigest()[0:FINGERPRINT_REDUCTION], t1))
 
+    # print(f"[DEBUG] Hashes generated: {len(hashes)}") # DEBUG
     return hashes
